@@ -115,3 +115,8 @@ def delete_post(post_id: int):
             BLOG_POST.pop(index)
             return
     raise HTTPException(status_code=404,detail="Post no encontrado")
+
+
+
+
+
