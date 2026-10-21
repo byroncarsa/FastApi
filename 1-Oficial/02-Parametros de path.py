@@ -10,19 +10,19 @@ class ModelName(str, Enum):
 app = FastAPI()
 
 
-# PARAMETROS DE PATH
+# # PARAMETROS DE PATH
 # @app.get("/items/{item_id}")
 # async def read_item(item_id):
 #     return {"item_id": item_id}
 
 
-# PARAMETROS CON TIPOS
+# # PARAMETROS CON TIPOS
 # @app.get("/items2/{item_id}")
 # async def read_item(item_id: int):
 #     return {"item_id": item_id}
 
 
-# EL ORDEN IMPORTA
+# # EL ORDEN IMPORTA
 # @app.get("/users/me")
 # async def read_user_me():
 #     return {"user_id": "the current user"}
@@ -32,7 +32,7 @@ app = FastAPI()
 #     return {"user_id": user_id}
 
 
-# CON PATH CON MISMO NOMBRE SOLO SE TOMA EL PRIMERO
+# # CON PATH CON MISMO NOMBRE SOLO SE TOMA EL PRIMERO
 # @app.get("/users")
 # async def read_users():
 #     return ["Rick", "Morty"]
@@ -43,7 +43,7 @@ app = FastAPI()
 #     return ["Bean", "Elfo"]
 
 
-# VALORES PREDEFINIDOS
+# # VALORES PREDEFINIDOS
 # @app.get("/models/{model_name}")
 # async def get_model(model_name: ModelName):
 #     if model_name is ModelName.alexnet:
@@ -57,6 +57,6 @@ app = FastAPI()
 
 # PARAMETROS DE PATH CONTENIENDO PATHS
 # No fue comprendido del todo
-# @app.get("/files/{file_path:path}")
-# async def read_file(file_path: str):
-#     return {"file_path": file_path}
+@app.get("/files/{file_path:path}")
+async def read_file(file_path: str):
+    return {"file_path": file_path}

@@ -6,26 +6,21 @@ app = FastAPI()
 fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
 
 
-# PARAMETROS DE QUERY
+# # PARAMETROS DE QUERY
 # @app.get("/items/")
 # async def read_item(skip: int = 0, limit: int = 10):
 #     return fake_items_db[skip : skip + limit]
 
 
-
-# VALORES OPCIONALES
+# # VALORES OPCIONALES
 # @app.get("/items/{item_id}")
 # async def read_item(item_id: str, q: str | None = None):
 #     if q:
 #         return {"item_id": item_id, "q": q}
 #     return {"item_id": item_id}
 
-# from fastapi import FastAPI
 
-# app = FastAPI()
-
-
-# CONVERSION DE TIPOS
+# # CONVERSION DE TIPOS
 # @app.get("/items/{item_id}")
 # async def read_item(item_id: str, q: str | None = None, short: bool = False):
 #     item = {"item_id": item_id}
@@ -38,7 +33,7 @@ fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"
 #     return item
 
 
-# MULTIPLES PARAMETROS
+# # MULTIPLES PARAMETROS
 # @app.get("/users/{user_id}/items/{item_id}")
 # async def read_user_item(
 #     user_id: int, item_id: str, q: str | None = None, short: bool = False
@@ -58,7 +53,3 @@ fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"
 async def read_user_item(item_id: str, needy: str):
     item = {"item_id": item_id, "needy": needy}
     return item
-
-
-
-
