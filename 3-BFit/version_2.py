@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+# Con validaciones
+from fastapi import FastAPI, Path, Query
+from typing import Annotated
 from pydantic import BaseModel
 from base_de_datos import base_de_datos
 
@@ -23,15 +25,27 @@ class Peso(BaseModel):
 # USUARIO
 # Traer todos los usuarios
 @app.get("/usuarios", tags=["Usuarios"])
-def leer_usuarios():
-    return base_de_datos
+def leer_usuarios(
+    skip: Annotated[int, Query(title="Definir inicio")] = 0, 
+    limit: Annotated[int, Query(title="Definir limite")] = 10
+    # skip: int = 0,
+    # limit: int = 10
+):
+    return base_de_datos[skip : skip + limit]
 
 
 # Mostrar usuario por id
 @app.get("/usuarios/{usuario_id}", tags=["Usuarios"])
-def leer_usuario(usuario_id: int):
+def leer_usuario(
+    usuario_id: Annotated[int, Path(title="El id del usuario a obtener", ge= 1, le=1000)], 
+    incluir_pesos: bool = False
+):
     for user in base_de_datos:
         if user['id'] == usuario_id:
+            if not incluir_pesos:
+                usuario = user.copy()
+                usuario.pop('pesos', None)
+                return usuario
             return user
     return {"message" : "Usuario no encontrado"}
 
@@ -45,7 +59,10 @@ def crear_usuario(usuario: Usuario):
 
 # Editar usuario{
 @app.put("/usuarios/{usuario_id}", tags=["Usuarios"])
-def editar_usuario(usuario_id: int, usuario: Usuario):
+def editar_usuario(
+    usuario_id: Annotated[int, Path(title="El id del usuario a editar", ge= 1, le=1000)], 
+    usuario: Usuario
+):
     for user in base_de_datos:
         if user['id'] == usuario_id:
             user.update(usuario.model_dump())

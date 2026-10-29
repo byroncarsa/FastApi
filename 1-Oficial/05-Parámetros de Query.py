@@ -74,6 +74,7 @@ async def read_items(q: Annotated[str, Query(min_length=3)] = "fixedquery"):
         results.update({"q": q})
     return results
 
+
 # Parámetros requeridos
 @app.get("/items/")
 async def read_items(q: Annotated[str, Query(min_length=3)]):
@@ -112,6 +113,7 @@ async def read_items(q: Annotated[list, Query()] = []):
     query_items = {"q": q}
     return query_items
 
+
 # Declarar más metadatos
 @app.get("/items/")
 async def read_items(
@@ -129,6 +131,7 @@ async def read_items(
         results.update({"q": q})
     return results
 
+
 # Alias para parámetros
 @app.get("/items/")
 async def read_items(q: Annotated[str | None, Query(alias="item-query")] = None):
@@ -136,6 +139,7 @@ async def read_items(q: Annotated[str | None, Query(alias="item-query")] = None)
     if q:
         results.update({"q": q})
     return results
+
 
 # Declarar parámetros obsoletos
 @app.get("/items/")
@@ -168,6 +172,7 @@ async def read_items(
         return {"hidden_query": hidden_query}
     else:
         return {"hidden_query": "Not found"}
+
 
 # Validación personalizada
 data = {
@@ -212,7 +217,3 @@ async def read_items(
     else:
         id, item = random.choice(list(data.items()))
     return {"id": id, "name": item}
-
-
-
-
