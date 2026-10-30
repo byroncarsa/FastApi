@@ -1,4 +1,4 @@
-# Con validaciones
+# Validaciones query y path
 from fastapi import FastAPI, Path, Query
 from typing import Annotated
 from pydantic import BaseModel
@@ -16,12 +16,6 @@ class Usuario(BaseModel):
     imc: float | None = None
     pesos: list[dict] | None = None
     
-class Peso(BaseModel):
-    peso_id: int
-    peso: float
-    fecha: str
-
-
 # USUARIO
 # Traer todos los usuarios
 @app.get("/usuarios", tags=["Usuarios"])
