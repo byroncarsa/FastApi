@@ -41,7 +41,7 @@ async def read_users():
 
 
 @app.get("/users")
-async def read_users2():
+async def read_users():
     return ["Bean", "Elfo"]
 
 
