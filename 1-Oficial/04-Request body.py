@@ -34,7 +34,7 @@ async def update_item(item_id: int, item: Item):
     return {"item_id": item_id, **item.model_dump()}
 
 
-# REQUEST BODY + PATH + PARAMMETROS DE QUERY
+# REQUEST BODY + PATH + PARAMETROS DE QUERY
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, item: Item, q: str | None = None):
     result = {"item_id": item_id, **item.model_dump()}
