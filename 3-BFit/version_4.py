@@ -8,17 +8,17 @@ app = FastAPI(title="Mi API de pesos", description="Esta es una API para manejar
 
 # MODELOS PYDANTIC
 class Peso(BaseModel):
-    id: int
-    peso: float
-    fecha : str
+    id: int = Field(title="Id del peso", ge=1, le=1000, examples=["1"])
+    peso: float = Field(gt=0, description="El peso debe ser mayor a 0", examples=["70.5"])
+    fecha : str = Field(title="Fecha del peso", examples=["2023-01-01"])
 
 class Usuario(BaseModel):
-    id: int
+    id: int = Field(title="Id del usuario", ge=1, le=1000, examples=["1"])
     nombre: str = Field(title="Nombre del usuario", min_length=5, max_length=50, examples=["Byron"])
-    fecha_nacimiento: str
-    altura: float = Field(gt=0, description="La altura debe ser mayor a 0") 
-    peso_objetivo: float = Field(default=None, gt=0, description="El peso debe ser mayor a 0") 
-    imc: float = Field(default=None, gt=0, description="El imc debe ser mayor a 0") 
+    fecha_nacimiento: str = Field(title="Fecha de nacimiento del usuario", examples=["1990-01-01"])
+    altura: float = Field(gt=0, description="La altura debe ser mayor a 0", examples=["1.70"]) 
+    peso_objetivo: float = Field(default=None, gt=0, description="El peso debe ser mayor a 0", examples=["70.5"]) 
+    imc: float = Field(default=None, gt=0, description="El imc debe ser mayor a 0", examples=["20.5"]) 
     pesos: list[Peso] | None = None
     
     
@@ -26,18 +26,18 @@ class Usuario(BaseModel):
 # Traer todos los usuarios
 @app.get("/usuarios", tags=["Usuarios"])
 def leer_usuarios(
-    skip: Annotated[int, Query(title="Definir inicio")] = 0, 
-    limit: Annotated[int, Query(title="Definir limite")] = 10
+    skip: Annotated[int, Query(title="Definir inicio", ge=0)] = 0, 
+    limit: Annotated[int, Query(title="Definir limite", ge=1)] = 10
 ):
     return base_de_datos[skip : skip + limit]
 
 
 # Mostrar usuario por id
 @app.get("/usuarios/{usuario_id}", tags=["Usuarios"])
-def leer_usuario(
+def leer_usuario (
     usuario_id: Annotated[int, Path(title="El id del usuario a obtener", ge= 1, le=1000)], 
     incluir_pesos: bool = False
-):
+) -> dict | Usuario:
     for user in base_de_datos:
         if user['id'] == usuario_id:
             if not incluir_pesos:
@@ -50,7 +50,7 @@ def leer_usuario(
 
 # Agregar usuario
 @app.post("/usuarios/", tags=["Usuarios"])
-def crear_usuario(usuario: Annotated[Usuario, Body(embed=True)]):
+def crear_usuario(usuario: Annotated[Usuario, Body(embed=True)]) -> dict:
     base_de_datos.append(usuario.model_dump())
     return {"message" : "Usuario creado exitosamente", "usuario" : usuario}
 
@@ -60,7 +60,7 @@ def crear_usuario(usuario: Annotated[Usuario, Body(embed=True)]):
 def editar_usuario(
     usuario_id: Annotated[int, Path(title="El id del usuario a editar", ge= 1, le=1000)], 
     usuario: Annotated[Usuario, Body(embed=True)]
-):
+) -> dict:
     for user in base_de_datos:
         if user['id'] == usuario_id:
             user.update(usuario.model_dump())
