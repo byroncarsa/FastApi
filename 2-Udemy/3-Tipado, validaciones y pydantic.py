@@ -84,6 +84,7 @@ def get_post(post_id: int, include_content: bool = Query(default=True, descripti
     
     return HTTPException(status_code=404, detail="Post no encontrado")
 
+
 @app.post("/posts", response_model=PostPublic, response_description="Post creado (OK)")
 def create_post(post: PostCreate):
     new_id = (BLOG_POST[-1]["id"]+1) if BLOG_POST else 1

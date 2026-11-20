@@ -129,77 +129,7 @@ def home():
     return {'message': 'Bienvenidos a Mini Blog por Devtalles'}
 
 
-@app.get("/posts", response_model=PaginatedPost)
-def list_posts(
-    text: Optional[str] = Query(
-        default=None,
-        deprecated=True,
-        description="Parámetro obsoleto, usa 'query o search' en su lugar."
-    ),
-    query: Optional[str] = Query(
-        default=None,
-        description="Texto para buscar por título",
-        alias="search",
-        min_length=3,
-        max_length=50,
-        pattern=r"^[\w\sáéíóúÁÉÍÓÚüÜ-]+$"
-    ),
-    per_page: int = Query(
-        10, ge=1, le=50,
-        description="Número de resultados (1-50)"
-    ),
-    page: int = Query(
-        1, ge=1,
-        description="Número de página (>=1)"
-    ),
-    order_by: Literal["id", "title"] = Query(
-        "id", description="Campo de orden"
-    ),
-    direction: Literal["asc", "desc"] = Query(
-        "asc", description="Dirección de orden"
-    )
-):
-
-    results = BLOG_POST
-
-    query = query or text
-
-    if query:
-        results = [post for post in results if query.lower()
-                   in post["title"].lower()]
-
-    total = len(results)
-    total_pages = ceil(total/per_page) if total > 0 else 0
-
-    if total_pages == 0:
-        current_page = 1
-    else:
-        current_page = min(page, total_pages)
-
-    results = sorted(
-        results, key=lambda post: post[order_by], reverse=(direction == "desc"))
-
-    if total_pages == 0:
-        items = []
-    else:
-        start = (current_page - 1) * per_page
-        items = results[start: start + per_page]  # [10:20]
-
-    has_prev = current_page > 1
-    has_next = current_page < total_pages if total_pages > 0 else False
-
-    return PaginatedPost(
-        page=current_page,
-        per_page=per_page,
-        total=total,
-        total_pages=total_pages,
-        has_prev=has_prev,
-        has_next=has_next,
-        order_by=order_by,
-        direction=direction,
-        search=query,
-        items=items
-    )
+c
 
 
 @app.get("/posts/by-tags", response_model=List[PostPublic])
